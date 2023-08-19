@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -13,8 +14,7 @@ const app = express();
 const mongoose = require('mongoose');
 const { mainModule } = require('process');
 mongoose.set('strictQuery', false);
-const mongoDB =
-  'mongodb+srv://admin:123@cluster0.msgu0nb.mongodb.net/inventory?retryWrites=true&w=majority';
+const mongoDB = process.env.MONGO_DB_URL;
 main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
@@ -28,6 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

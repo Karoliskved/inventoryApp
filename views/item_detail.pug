@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1= title
+
+  h2 #{item.name}
+  img(src=item.photoURL style='width:100px;height:100px;')
+  p #{item.description}
+  h4 #{item.price} €
+  p #[strong units: ] #{item.amount}
+  p #[strong category: ]
+    each val, index in item.category
+        a(href=val.url) #{val.name}
+        if index < item.category.length - 1
+            |,
+    hr
+  p
+    a(href=item.url+'/delete') Delete item
+  p
+    a(href=item.url+'/update') Update item
+  p
+    a(href=item.url+'/addphoto') Add photo to item

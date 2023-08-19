@@ -1,5 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads');
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + '-' + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 // Require controller modules.
 const item_controller = require('../controllers/itemController');
@@ -33,6 +45,14 @@ router.get('/item/:id', item_controller.item_detail);
 
 // GET request for list of all item items.
 router.get('/items', item_controller.item_list);
+// get request for upload form
+router.get('/item/:id/addphoto', item_controller.item_photo_get);
+// get request for upload form
+router.post(
+  '/item/:id/addphoto',
+  upload.single('avatar'),
+  item_controller.item_photo_post
+);
 
 /// category ROUTES ///
 
@@ -58,6 +78,6 @@ router.post('/category/:id/update', category_controller.category_update_post);
 router.get('/category/:id', category_controller.category_detail);
 
 // GET request for list of all categorys.
-router.get('/categorys', category_controller.category_list);
+router.get('/categories', category_controller.category_list);
 
 module.exports = router;

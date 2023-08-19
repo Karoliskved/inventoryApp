@@ -7,6 +7,7 @@ const ItemSchema = new Schema({
   amount: { type: Number, required: true },
   price: { type: Schema.Types.Decimal128, required: true },
   category: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
+  photoURL: { type: String, maxLength: 400 },
 });
 ItemSchema.virtual('url').get(function () {
   return `/inventory/item/${this._id}`;
